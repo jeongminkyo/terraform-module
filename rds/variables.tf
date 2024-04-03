@@ -1,0 +1,12 @@
+variable "env" {}
+variable "name" {}
+variable "private_rds_subnets_id" {}
+variable "rds_storage" {}
+variable "db_engine" {}
+variable "db_engine_version" {}
+variable "db_instance_class" {}
+variable "db_user_name" {}
+variable "db_password" {}
+variable "database_name" {}
+variable "database_port" {}
+variable "security_groups_id" {}
