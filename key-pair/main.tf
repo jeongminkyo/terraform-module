@@ -15,9 +15,3 @@ resource "aws_key_pair" "jailgas-ssh-key" {
     TerraformManaged = "true"
   }
 }
-
-# Save Pem Key
-resource "local_file" "ssh_key" {
-  filename = "${path.module}/${aws_key_pair.jailgas-ssh-key.key_name}.pem"
-  content  = tls_private_key.key_pair.private_key_pem
-}
