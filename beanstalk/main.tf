@@ -1,3 +1,88 @@
+resource "aws_iam_role" "beanstalk_service" {
+  name = "aws-elasticbeanstalk-service-role"
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "elasticbeanstalk.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole",
+      "Condition": {
+        "StringEquals": {
+          "sts:ExternalId": "elasticbeanstalk"
+        }
+      }
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_role" "beanstalk_ec2" {
+  name = "aws-elasticbeanstalk-ec2-role"
+  assume_role_policy = <<EOF
+{
+  "Version": "2008-10-17",
+  "Statement": [
+    {
+      "Sid": "",
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_policy_attachment" "beanstalk_service" {
+  name = "elastic-beanstalk-service"
+  roles = [aws_iam_role.beanstalk_service.id]
+  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkCustomPlatformforEC2Role"
+}
+
+resource "aws_iam_policy_attachment" "beanstalk_ec2_administrator" {
+  name = "elastic-beanstalk-ec2-administrator"
+  roles = [aws_iam_role.beanstalk_ec2.id]
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk"
+}
+
+resource "aws_iam_policy_attachment" "beanstalk_ec2_full_access" {
+  name       = "elastic-beanstalk-ec2-full-access"
+  roles      = [aws_iam_role.beanstalk_ec2.id]
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+}
+
+resource "aws_iam_policy_attachment" "beanstalk_ec2_auto_scaling" {
+  name       = "elastic-beanstalk-ec2-auto-scaling"
+  roles      = [aws_iam_role.beanstalk_ec2.id]
+  policy_arn = "arn:aws:iam::aws:policy/AutoScalingFullAccess"
+}
+
+resource "aws_iam_policy_attachment" "beanstalk_ec2_health" {
+  name       = "elastic-beanstalk-ec2-health"
+  roles      = [aws_iam_role.beanstalk_ec2.id]
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkEnhancedHealth"
+}
+
+resource "aws_iam_policy_attachment" "beanstalk_ec2_customer_role" {
+  name       = "elastic-beanstalk-ec2-customer-role"
+  roles      = [aws_iam_role.beanstalk_ec2.id]
+  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkManagedUpdatesCustomerRolePolicy"
+}
+
+resource "aws_iam_policy_attachment" "beanstalk_ec2_load_balance" {
+  name       = "elastic-beanstalk-ec2-load-balance"
+  roles      = [aws_iam_role.beanstalk_ec2.id]
+  policy_arn = "arn:aws:iam::aws:policy/ElasticLoadBalancingFullAccess"
+}
+
 resource "aws_elastic_beanstalk_application" "jailgas-beanstalk" {
   name        = var.name
 }
