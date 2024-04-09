@@ -1,3 +1,3 @@
 output "certificate" {
-  value       = aws_acm_certificate.jailgas.arn
+  value       = aws_acm_certificate.acm.arn
 }

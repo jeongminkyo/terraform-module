@@ -1,4 +1,4 @@
-resource "aws_acm_certificate" "jailgas" {
+resource "aws_acm_certificate" "acm" {
   domain_name       = var.domain_name
   validation_method = "DNS"
   lifecycle {
